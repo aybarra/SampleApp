@@ -33,6 +33,7 @@ dependencies {
     compile 'com.googlecode.objectify:objectify:4.0b3'
     compile 'com.ganyo:gcm-server:1.0.2'
     compile files('/Users/andrasta/AndroidStudioProjects/SampleApp/build/joda-time-2.5.jar')
+    compile files('joda-time-2.5.jar')
 }
 
 appengine {

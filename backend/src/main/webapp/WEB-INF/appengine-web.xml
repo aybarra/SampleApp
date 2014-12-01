@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-    <application>crafty-chiller-763</application>
+    <application>elemental-alloy-767</application>
     <version>1</version>
     <threadsafe>true</threadsafe>
 
@@ -17,6 +17,6 @@
             Once you have your API key (which starts with “AIza...”), replace the "gcm.api.key" string in this file.
             -->
 
-        <property name="gcm.api.key" value="AIzaSyCdguLD2prt8J_waaNmdvrviOYWqQW6ELQ"/>
+        <property name="gcm.api.key" value="AIzaSyAR_SD8oBwFWWvZpyrFv8_suqNxRwiK6qY"/>
     </system-properties>
 </appengine-web-app>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/_ah/spi/Check</url>
-    <description>Check Upcoming Tasks</description>
+    <url>/check</url>
+    <description>Check Upcoming Tasks for today</description>
     <schedule>every day 00:00</schedule>
     <timezone>America/New_York</timezone>
   </cron>
