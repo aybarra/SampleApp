@@ -41,10 +41,13 @@ public class MessagingEndpoint {
             log.warning("Not sending message because it is empty");
             return;
         }
-        // crop longer messages
-        if (message.length() > 1000) {
-            message = message.substring(0, 1000) + "[...]";
-        }
+//        // crop longer messages
+//        if (message.length() > 1000) {
+//            message = message.substring(0, 1000) + "[...]";
+//        }
+
+        log.warning(message);
+
         Sender sender = new Sender(API_KEY);
         Message msg = new Message.Builder().addData("action", message).build();
         List<RegistrationRecord> records = ofy().load().type(RegistrationRecord.class).limit(10).list();

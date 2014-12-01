@@ -48,12 +48,11 @@
                 <p>Enter your message below and press "Send Message" button to send it over Google Cloud Messaging to all registered devices.</p>
                 <form>
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg" placeholder="Message text" id="messageTextInput" />
                           <span class="input-group-btn">
-                             <button class="btn btn-default btn-primary btn-group btn-lg" type="submit" id="sendMessageButton">Send Message &raquo;</button>
+                             <button class="btn btn-default btn-primary btn-group btn-lg" type="submit" id="sendMessageButton">Send Reminder &raquo;</button>
                           </span>
                           <span class="input-group-btn">
-                             <button class="btn btn-default btn-primary btn-group btn-lg" type="submit" id="queryBackendButton">Query Backend &raquo;</button>
+                             <button class="btn btn-default btn-primary btn-group btn-lg" type="submit" id="getLocationButton">Get Location &raquo;</button>
                           </span>
                     </div>
 
@@ -78,11 +77,11 @@
     function enableClick() {
 
       document.getElementById('sendMessageButton').onclick = function() {
-        var message = document.getElementById('messageTextInput').value;
-        if (!message) {
-          message = '(Empty message)';
-        }
-        var message1 = 'get_location';
+
+        var message1 = "{\"action\": \"reminder\", \"eventName\": \"CS8803: AdvancedSoftwareEngineering\", \"eventStartTime\": \"2014-12-115: 00: 00\", \"eventLocation\": \"KlausBuilding\", \"eventCoordinates\": \"33.7773, -84.3962\", \"eventEndTime\": \"2014-12-116: 30: 00\"}"
+        //"{'action': 'reminder', 'eventName': 'CS8803: Advanced Software Engineering', 'eventStartTime': '2014-12-1 15:00:00', 'eventLocation':'Klaus Building','eventCoordinates':'33.7773,-84.3962', 'eventEndTime':'2014-12-1 16:30:00'}";
+        //'reminder';
+
         gapi.client.messaging.messagingEndpoint.sendMessage({'action': message1}).execute(
           function(response) {
             var outputAlertDiv = document.getElementById('outputAlert');
@@ -102,25 +101,27 @@
       }
     }
 
-    function enableBackendQuery() {
-        document.getElementById('queryBackendButton').onclick = function() {
-            gapi.client.queryBackend.fetchBackendUserInfo().execute(
-                function(response) {
-                    var outputAlertDiv = document.getElementById('outputAlert');
-                    outputAlertDiv.style.visibility = 'visible';
+    function enableGetLocation() {
 
-                    if (response && response.error) {
-                      outputAlertDiv.className = 'alert alert-danger';
-                      outputAlertDiv.innerHTML = '<b>Error Code:</b> ' + response.error.code + ' [' + response.error.message +']';
-                    }
-                    else {
-                      outputAlertDiv.className = 'alert alert-success';
-                      outputAlertDiv.innerHTML = '<b>Success:</b> Message \"' + message1 + '\" sent to all registered devices!</h2>';
-                    }
+        document.getElementById('getLocationButton').onclick = function() {
+            var message1 = 'get_location';
+            gapi.client.messaging.messagingEndpoint.sendMessage({'action': message1}).execute(
+              function(response) {
+                var outputAlertDiv = document.getElementById('outputAlert');
+                outputAlertDiv.style.visibility = 'visible';
+
+                if (response && response.error) {
+                  outputAlertDiv.className = 'alert alert-danger';
+                  outputAlertDiv.innerHTML = '<b>Error Code:</b> ' + response.error.code + ' [' + response.error.message +']';
                 }
+                else {
+                  outputAlertDiv.className = 'alert alert-success';
+                  outputAlertDiv.innerHTML = '<b>Success:</b> Message \"' + message1 + '\" sent to all registered devices!</h2>';
+                }
+              }
             );
+            return false;
         }
-        return false;
     }
 
     function ajaxError(jqXHR, textStatus, errorThrown){
@@ -137,11 +138,11 @@
       }
 
       var callback2 = function() {
-        enableBackendQuery();
+        enableGetLocation();
       }
       gapi.client.load(apiName, apiVersion, callback, apiRoot);
 
-      gapi.client.load('queryBackend', apiVersion, callback2, apiRoot);
+      gapi.client.load(apiName, apiVersion, callback2, apiRoot);
     }
   </script>
 <!--
