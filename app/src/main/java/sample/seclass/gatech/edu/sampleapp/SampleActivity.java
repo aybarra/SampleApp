@@ -58,7 +58,7 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
     private Context context;
 
     // TODO: change to your own sender ID to Google Developers Console project number, as per instructions above
-    private static final String SENDER_ID = "1085949217955";
+    private static final String SENDER_ID = "378635173786";
 
     @Override
     protected String doInBackground(Context... params) {
@@ -95,7 +95,7 @@ class GcmRegistrationAsyncTask extends AsyncTask<Context, Void, String> {
             // so it can use GCM/HTTP or CCS to send messages to your app.
             // The request to your server should be authenticated if your app
             // is using accounts.
-            regService.register(regId).execute();
+            regService.register(regId, "aybarra3").execute();
 
         } catch (IOException ex) {
             ex.printStackTrace();

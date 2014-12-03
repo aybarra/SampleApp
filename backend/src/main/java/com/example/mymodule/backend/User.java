@@ -5,8 +5,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import com.example.mymodule.backend.Events;
 
 
 
@@ -52,8 +58,7 @@ public class User {
 	}
 	
 	//Methods
-	public void setRegistrationID(String GTID, String RegistrationID){
-		gtid = GTID;
+	public void setRegistrationID(String RegistrationID){
 		registrationId=RegistrationID;
 		String query = "https://1-dot-rlr-gtnow-backend.appspot.com/_ah/api/user/v1/user";
 		String s = "{\"registrationId\":\""+registrationId+"\",\"gtid\":\""+gtid+"\"}";
@@ -138,9 +143,59 @@ public class User {
 		return null;
 	}
 	
+	public String nextClassLocation(){
+		String query = "https://1-dot-rlr-gtnow-backend.appspot.com/_ah/api/event/v1/event?gtid="+gtid;
+		String USER_AGENT = "Chrome/38.0";
+		try {
+			URL obj = new URL(query);
+			HttpURLConnection con;
+			con = (HttpURLConnection) obj.openConnection();
+			// optional default is GET
+			con.setRequestMethod("GET");
+			//add request header
+			con.setRequestProperty("User-Agent", USER_AGENT);
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine, jsonstring="";
+				
+			while ((inputLine = in.readLine()) != null) {
+				jsonstring+=inputLine+"\n";
+			}
+			in.close();
+			JSONObject json = (JSONObject) new JSONParser().parse(jsonstring);
+			json.remove("etag");
+			json.remove("kind");
+			LocalTime t, t1=LocalTime.now();
+			LocalDate d;
+			int id=-1;
+			for(int i=0; i<((JSONArray) json.get("items")).size();i++){
+			Events e = new Events((JSONObject) ((JSONArray) json.get("items")).get(i));
+			t=e.getStartTime();
+			d=e.getStartDate();
+			if(d.equals(LocalDate.now()) && t.isAfter(LocalTime.now()) && (t.isBefore(t1)||i==0)){
+				t1=t;
+				id=i;
+			}
+			}
+			if(id==-1){
+				return null;
+			}
+			System.out.println(id);
+			Events e = new Events((JSONObject) ((JSONArray) json.get("items")).get(id));
+			return e.getLoc();
+		}
+		catch (Exception e1){
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+		}
+		return null;
+	}
+	public String getRegistrationID(){
+		return registrationId;
+	}
+	
 //	public static void main(String[] args){
-//		User u = new User("gburdell");
-//		JSONObject g = u.getGroups();
-//		System.out.println(g.toString());
+//		User u = new User("sgadkari6");
+//		//u.setRegistrationID("98199");
+//		System.out.println(u.getRegistrationID());
 //	}
 }

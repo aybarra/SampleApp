@@ -11,10 +11,11 @@ public class RegistrationRecord {
     @Id
     Long id;
 
-    @Index
+
     private String regId;
 
-    private String gtUsername;
+    @Index
+    private String gtId;
     // you can add more fields...
 
     public RegistrationRecord() {}
@@ -27,7 +28,7 @@ public class RegistrationRecord {
         this.regId = regId;
     }
 
-    public String getGtUsername(){ return gtUsername;}
+    public String getGtUsername(){ return gtId;}
 
-    public void setGtUsername(String gtUsername) { this.gtUsername = gtUsername;}
+    public void setGtUsername(String gtUsername) { this.gtId = gtUsername;}
 }

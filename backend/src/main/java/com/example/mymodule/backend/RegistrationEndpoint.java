@@ -30,29 +30,30 @@ public class RegistrationEndpoint {
      * Register a device to the backend
      *
      * @param regId The Google Cloud Messaging registration Id to add
+     * @param gtId
      */
     @ApiMethod(name = "register")
-    public void registerDevice(@Named("regId") String regId) {
+    public void registerDevice(@Named("regId") String regId, @Named("gtId") String gtId) {
         if(findRecord(regId) != null) {
             log.info("Device " + regId + " already registered, skipping register");
             return;
         }
         RegistrationRecord record = new RegistrationRecord();
         record.setRegId(regId);
-//        record.setGtUsername(gtUsername);
+        record.setGtUsername(gtId);
         ofy().save().entity(record).now();
     }
 
     /**
      * Unregister a device from the backend
      *
-     * @param regId The Google Cloud Messaging registration Id to remove
+     * @param gtId The Google Cloud Messaging registration Id to remove
      */
     @ApiMethod(name = "unregister")
-    public void unregisterDevice(@Named("regId") String regId) {
-        RegistrationRecord record = findRecord(regId);
+    public void unregisterDevice(@Named("gtId") String gtId) {
+        RegistrationRecord record = findRecord(gtId);
         if(record == null) {
-            log.info("Device " + regId + " not registered, skipping unregister");
+            log.info("Device " + gtId + " not registered, skipping unregister");
             return;
         }
         ofy().delete().entity(record).now();
@@ -70,8 +71,8 @@ public class RegistrationEndpoint {
         return CollectionResponse.<RegistrationRecord>builder().setItems(records).build();
     }
 
-    private RegistrationRecord findRecord(String regId) {
-        return ofy().load().type(RegistrationRecord.class).filter("regId", regId).first().now();
+    private RegistrationRecord findRecord(String gtId) {
+        return ofy().load().type(RegistrationRecord.class).filter("gtId", gtId).first().now();
     }
 
 }
