@@ -1,4 +1,4 @@
-package edu.gatech.cs8803.team4.building;
+package com.example.mymodule.backend;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -9,9 +9,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 public class Building {
-private long id;
+private String id;
 private String location;
-public Building(long buildingid){
+public Building(String buildingid){
 	id=buildingid;
 	String query="https://1-dot-rlr-gtnow-backend.appspot.com/_ah/api/building/v1/building/"+id;
 	String USER_AGENT = "Chrome/38.0";

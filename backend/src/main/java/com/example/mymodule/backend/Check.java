@@ -40,7 +40,7 @@ public class Check extends HttpServlet {
 			ArrayList<Event> eventDB = new ArrayList<Event>();
 			DateTimeZone zone = DateTimeZone.forID("US/Eastern");
 			//userName, eventName, longitude, latitude, startTime
-			DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'.'ZZZ'Z'").withZone(zone);
+			DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'.000Z'").withZone(zone);
 
         URL obj;
         String query = "https://1-dot-rlr-gtnow-backend.appspot.com/_ah/api/event/v1/event";
@@ -67,17 +67,14 @@ public class Check extends HttpServlet {
             json.remove("kind");
             for(int i=0;i<((JSONArray) json.get("items")).size();i++){
                 JSONObject j = (JSONObject) ((JSONArray) json.get("items")).get(i);
-                Building b = new Building((long) j.get("buildingID"));
+                Building b = new Building(j.get("buildingID").toString());
                 eventDB.add(new Event((String) j.get("gtid"), (String) j.get("name"), b.getlocation(), df.parseDateTime((String) j.get("startTime"))));
             }
-
-
         }
         catch (Exception e1){
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
 			//eventDB.add(new Event("user1", "class1", "88.34, 88.56", df.parseDateTime("2014/11/29 23:51:00")));
 			//eventDB.add(new Event("user2", "class3",  "88.34, 88.56", df.parseDateTime("2014/11/29 23:52:00")));
 			//eventDB.add(new Event("user3", "class2", "88.34, 88.56", df.parseDateTime("2014/11/29 23:51:00")));
@@ -88,7 +85,7 @@ public class Check extends HttpServlet {
 				DateTime now = new DateTime(zone);
 				if(now.toLocalDate().equals(e.getStartTime().toLocalDate())) {
 					//Start Time - Notification Time， default = 10 min before event
-					long fixedTimeBefore = 1000 * 60 * 10;
+					long fixedTimeBefore = 1000 * 60 * 30;
 					
 					Period timeleft = new Period(now, e.getStartTime());
 					long timeToNotify = timeleft.toStandardDuration().getMillis() - fixedTimeBefore;
